@@ -6,7 +6,7 @@
 
 char letterFreqFile[] = "LetFreq.txt";
 char readFile[] = "InputText.txt";
-float letFreq[ALPH*2], inputFreq[ALPH*2];
+float letFreq[ALPH] = {0}, inputFreq[ALPH]= {0};
 
 void readFreq (float given[], char fname[]) {
 	FILE *ifp = fopen(fname, "r");
@@ -20,7 +20,6 @@ void readFreq (float given[], char fname[]) {
 	float freq;
 	int i=0;
 	while (fscanf(ifp, "%c %f\n", letter, &freq) != EOF) {
-		letFreq[ALPH+i] = freq;
 		letFreq[i++] = freq;
 	}
 	
@@ -36,22 +35,22 @@ void calcFreq (float found[], char fname[]) {
 	
 	int i=0, c, count=0;
 	while ((c = fgetc(ifp)) != EOF) {
-		if (c >= 65 && c <= 90){
+		if (c >= (int)'A' && c <= (int)'Z'){
 			found[(char)c - (int)'A']++;
 			count++;
-		} else if (c >= 97 && c <= 122) {
-			found[((char)c - (int)'a')+ALPH]++;
+		} else if (c >= (int)'a' && c <= (int)'z') {
+			found[(char)c - (int)'a']++;
 			count++;
 		}
 	}
 	
-	for (int i=0; i < ALPH*2; i++){
+	for (int i=0; i < ALPH; i++){
 		found[i] = found[i] / count;
 	}
 }
 
 char rotate (char ch, int num) {
-	return 0;
+	return (char)(((int)ch - num) % ALPH);
 }
 
 int findKey (float given[], float found[]) {
