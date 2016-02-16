@@ -54,7 +54,29 @@ char rotate (char ch, int num) {
 }
 
 int findKey (float given[], float found[]) {
-	return 0;
+	
+	int=i, j;
+	float diff[ALPH] = {0};
+	
+	for (i=0; i < ALPH; i++) {
+		for (j=0; j < ALPH; j++) {
+			if(given[j] > (found[j+i] % ALPH))
+				diff[i] = diff[i] + (given[j] - (found[j+i] % ALPH));
+			else
+				diff[i] = diff[i] + ((found[j+i] % ALPH) - given[j]);
+		}
+	}
+	
+	float lowest = diff[0];
+	int key = 0;
+	for (i=1; i < ALPH; i++) {
+		if (diff[i] < lowest) {
+			lowest = diff[i];
+			key = i;
+		}
+	}
+	
+	return key;
 }
 
 void decrypt (int key, char fname[]) {
@@ -66,5 +88,7 @@ int main () {
 	printf ("%f\n", letFreq[1]);
 	calcFreq (inputFreq, readFile);
 	printf ("%f\n", inputFreq[1]);
+	findKey (letFreq, inputFreq);
+	
 	return 0;
 }
