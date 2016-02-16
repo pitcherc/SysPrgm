@@ -50,20 +50,26 @@ void calcFreq (float found[], char fname[]) {
 }
 
 char rotate (char ch, int num) {
-	return (char)(((int)ch - num) % ALPH);
+	if (ch >= (int)'A' && ch <= (int)'Z') {
+		return (char)((((int)ch - (int)'A') + ALPH) - num) % ALPH + (int)'A';
+	} else if (ch >= (int)'a' && ch <= (int)'z') {
+		return (char)((((int)ch - (int)'a') + ALPH) - num) % ALPH + (int)'a';
+	} else {
+		return 0;
+	}
 }
 
 int findKey (float given[], float found[]) {
 	
-	int=i, j;
+	int i, j;
 	float diff[ALPH] = {0};
 	
 	for (i=0; i < ALPH; i++) {
 		for (j=0; j < ALPH; j++) {
-			if(given[j] > (found[j+i] % ALPH))
-				diff[i] = diff[i] + (given[j] - (found[j+i] % ALPH));
+			if(given[j] > found[(j+i) % ALPH])
+				diff[i] = diff[i] + (given[j] - found[(j+i)%ALPH]);
 			else
-				diff[i] = diff[i] + ((found[j+i] % ALPH) - given[j]);
+				diff[i] = diff[i] + (found[(j+i)%ALPH] - given[j]);
 		}
 	}
 	
@@ -75,20 +81,34 @@ int findKey (float given[], float found[]) {
 			key = i;
 		}
 	}
+	printf("%d\n",key);
 	
 	return key;
 }
 
 void decrypt (int key, char fname[]) {
+	FILE *ifp = fopen(fname, "r");
 	
+	if (ifp == NULL) {
+		fprintf(stderr, "Can't open input file InputText.txt\n");
+		exit(1);
+	}
+	
+	int c;
+	while ((c = fgetc(ifp)) != EOF) {
+		if (c >= (int)'A' && c <= (int)'Z'){
+			printf("%c", rotate(c, key));
+		} else if (c >= (int)'a' && c <= (int)'z') {
+			printf("%c", rotate(c, key));
+		} else {
+			printf ("%c", c);
+		}
+	}
 }
 
 int main () {
 	readFreq (letFreq, letterFreqFile);
-	printf ("%f\n", letFreq[1]);
 	calcFreq (inputFreq, readFile);
-	printf ("%f\n", inputFreq[1]);
-	findKey (letFreq, inputFreq);
-	
+	decrypt(findKey (letFreq, inputFreq), readFile);
 	return 0;
 }
