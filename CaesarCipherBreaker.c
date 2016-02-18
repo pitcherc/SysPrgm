@@ -1,11 +1,10 @@
 #import <stdio.h>
 #import <stdlib.h>
+#import <string.h>
 
 #define ALPH 26
 #define SIZE 1024
 
-char letterFreqFile[] = "LetFreq.txt";
-char readFile[] = "InputText.txt";
 float letFreq[ALPH] = {0}, inputFreq[ALPH]= {0};
 
 void readFreq (float given[], char fname[]) {
@@ -81,7 +80,7 @@ int findKey (float given[], float found[]) {
 			key = i;
 		}
 	}
-	printf("%d\n",key);
+	printf("The best fit key is %d\n",key);
 	
 	return key;
 }
@@ -93,22 +92,37 @@ void decrypt (int key, char fname[]) {
 		fprintf(stderr, "Can't open input file InputText.txt\n");
 		exit(1);
 	}
+	char *str1 = ".txt";
+	char *str2 = (char *) malloc(1 + strlen(fname)+ strlen(str1) );
+	strcpy(str2, fname);
+	strcat(str2, str1);
+	
+	FILE *ofp = fopen(str2, "w");
+	
+	if (ofp == NULL) {
+		fprintf(stderr, "Can't open output file %s.txt!\n", fname);
+		exit(1);
+	}
 	
 	int c;
 	while ((c = fgetc(ifp)) != EOF) {
 		if (c >= (int)'A' && c <= (int)'Z'){
 			printf("%c", rotate(c, key));
+			fprintf(ofp, "%c", rotate(c, key));
 		} else if (c >= (int)'a' && c <= (int)'z') {
 			printf("%c", rotate(c, key));
+			fprintf(ofp, "%c", rotate(c, key));
 		} else {
 			printf ("%c", c);
+			fprintf(ofp, "%c", c);
 		}
 	}
+	printf("\n");
 }
 
-int main () {
-	readFreq (letFreq, letterFreqFile);
-	calcFreq (inputFreq, readFile);
-	decrypt(findKey (letFreq, inputFreq), readFile);
+int main (int argc, char* argv[]) {
+	readFreq (letFreq, argv[1]);
+	calcFreq (inputFreq, argv[2]);
+	decrypt(findKey (letFreq, inputFreq), argv[2]);
 	return 0;
 }

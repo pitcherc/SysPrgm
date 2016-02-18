@@ -22,11 +22,7 @@ cipher_breaker:\
 \
 testing: test3 test4\
 test3:\
-	./breaker LetFreq.txt Small.out\
+	./breaker Small.out\
 test4:\
-	./breaker LetFreq.txt Large.out\
-\
-dif: dif1 dif2\
-dif1:\
-	diff -s\
+	./breaker Large.out\
 }
