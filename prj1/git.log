@@ -1,0 +1,47 @@
+commit bf68bb7b39e119ba8ce8ef0ec7e9efa5a4391dc2
+Author: Charles <charles@revel.in>
+Date:   Thu Feb 18 13:37:46 2016 -0500
+
+    adding fileoutput and finishing the makefile
+
+commit 06b7ebd4612faf057098f40f85b035c6b9098f5c
+Author: Charles <charles@revel.in>
+Date:   Mon Feb 15 22:47:38 2016 -0500
+
+    final
+
+commit e7f6f273a290f3dd777e8c2cf1989fead1191d8e
+Author: Charles <charles@revel.in>
+Date:   Mon Feb 15 20:52:53 2016 -0500
+
+    findKey()
+
+commit f942174c3a3f79deb0d0c99488afd466cad89326
+Author: Charles <charles@revel.in>
+Date:   Mon Feb 15 20:26:12 2016 -0500
+
+    rotate()
+
+commit 7d47dc160bc025ba811422eccc46df3dafacba50
+Author: Charles <charles@revel.in>
+Date:   Mon Feb 15 16:21:46 2016 -0500
+
+    calcFreq
+
+commit 125c91f9787bd48db57615c0eb46c140896e5418
+Author: Charles <charles@revel.in>
+Date:   Mon Feb 15 13:48:44 2016 -0500
+
+    readFreq()
+
+commit fd8d9fa2e24150592ada1289c12208d5f3003918
+Author: Charles <charles@revel.in>
+Date:   Mon Feb 15 13:19:51 2016 -0500
+
+    Initial
+
+commit eb1328405ad170cb1497ddc05aaa6d57447fa607
+Author: pitcherc <pitcherc@users.noreply.github.com>
+Date:   Mon Feb 15 13:13:57 2016 -0500
+
+    Initial commit
