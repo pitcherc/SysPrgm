@@ -4,7 +4,7 @@
 
 #define AVG_SERVICE 2.0
 
-Rand double expdist (double mean) {
+double expdist (double mean) {
 	double r = rand();
 	r /= RAND_MAX;
 	return -mean * log(r);
@@ -48,7 +48,6 @@ int main (int argc, char *argv[]) {
 	while(timeOfDay < 480) {
 		int r = (rand() % 100) + 1;
 		int customers = 0;
-		t = expdist (AVG_SERVICE);
 		
 		if(r >= lower0 && r <= upper0) {
 			customers = custPerMin[0];
@@ -67,6 +66,7 @@ int main (int argc, char *argv[]) {
 		}
 		
 		for(int j = 0; j < customers; j++) {
+			t = expdist (AVG_SERVICE);
 			for(int i = 0; i < numCashiers; i++) {
 				if(cashiers[i] < timeOfDay) {
 					cashiers[i] += t;
@@ -74,5 +74,6 @@ int main (int argc, char *argv[]) {
 				}
 			}
 		}
+		timeOfDay++;
 	}
 }
