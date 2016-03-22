@@ -1,8 +1,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
+#include "queue.h"
 
 #define AVG_SERVICE 2.0
+#define SIZE 3000
 
 double expdist (double mean) {
 	double r = rand();
@@ -46,7 +48,7 @@ int main (int argc, char *argv[]) {
 	
 	timeOfDay = 0;
 	while(timeOfDay < 480) {
-		int r = (rand() % 100) + 1;
+		int r = (rand() % upper4) + 1;
 		int customers = 0;
 		
 		if(r >= lower0 && r <= upper0) {
