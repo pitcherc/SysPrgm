@@ -3,9 +3,9 @@
 
 typedef struct customer {
 	int arrivalTime;
-	int ;
+	int proccessTime;
 } customer;
-void push(customer queue[], int arrival);
+void push(customer queue[], int arrival, int process);
 customer pop(customer queue[]);
 
 #endif
