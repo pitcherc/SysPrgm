@@ -2,9 +2,12 @@
 #include <math.h>
 #include <stdio.h>
 #include "queue.h"
+#include "stats.h"
 
 #define AVG_SERVICE 2.0
 #define SIZE 1500
+
+int custPerMin[5], percent[5];
 
 int expdist (double mean) {
 	double r = rand();
@@ -21,29 +24,12 @@ int cashierOpen (int cashiers[], int numCashiers, int timeOfDay) {
 	return -1;
 }
 
-int main (int argc, char *argv[]) {
+void simulation(int numOfTellers) {
 	int t, timeOfDay;
-	int custPerMin[5], percent[5];
-	int numCashiers = 7;
+	int numCashiers = numOfTellers;
 	customer queue[SIZE];
-	
-	if(argv[2] != NULL) {
-		numCashiers = atoi(argv[2]);
-	}
+	int totalWait = 0, totalCustomers = 0;
 	int cashiers[numCashiers];
-	
-	FILE *fp;
-	fp = fopen(argv[1], "r");
-	if (fp == NULL) {
-		fprintf(stderr, "Can't open input file %s\n", argv[1]);
-		exit(1);
-	}
-	
-	int i = 0;
-	while(fscanf(fp, "%d %d\n", &custPerMin[i], &percent[i]) == 2) {
-		i++;
-	}
-	fclose(fp);
 	
 	int lower0 = 1;
 	int upper0 = percent[0];
@@ -66,6 +52,7 @@ int main (int argc, char *argv[]) {
 				while(!isEmpty(queue) && cashierOpen(cashiers, numCashiers, timeOfDay) != -1) {
 					customer first = pop(queue);
 					int open = cashierOpen(cashiers, numCashiers, timeOfDay);
+					totalWait += timeOfDay - first.arrivalTime;
 					cashiers[num] = first.proccessTime;
 				}
 			}
@@ -92,11 +79,15 @@ int main (int argc, char *argv[]) {
 			customers = custPerMin[4];
 		}
 		
+		totalCustomers += customers;
+		
 		//if there is a line
 		if(!isEmpty(queue)) {
 			int num = cashierOpen(cashiers, numCashiers, timeOfDay);
 			if(num != -1) {
 				customer first = pop(queue);
+				totalWait += timeOfDay - first.arrivalTime;
+				cashiers[num] += first.proccessTime;
 			}
 			for(int j = 0; j < customers; j++) {
 				t = expdist (AVG_SERVICE);
@@ -116,4 +107,26 @@ int main (int argc, char *argv[]) {
 
 		timeOfDay++;
 	}
+	calc(totalWait, totalCustomers, timeOfDay);
+}
+
+int main (int argc, char *argv[]) {
+	
+	FILE *fp;
+	fp = fopen(argv[1], "r");
+	if (fp == NULL) {
+		fprintf(stderr, "Can't open input file %s\n", argv[1]);
+		exit(1);
+	}
+	
+	int i = 0;
+	while(fscanf(fp, "%d %d\n", &custPerMin[i], &percent[i]) == 2) {
+		i++;
+	}
+	fclose(fp);
+	
+	simulation(4);
+	simulation(5);
+	simulation(6);
+	simulation(7);
 }
