@@ -5,7 +5,7 @@
 #include "stats.h"
 
 #define AVG_SERVICE 2.0
-#define SIZE 1500
+#define SIZE 3000
 
 int custPerMin[5], percent[5];
 
@@ -46,19 +46,17 @@ void simulation(int numOfTellers) {
 	while(timeOfDay < 480 || !isEmpty(queue)) {
 		
 		//after hours
-		if(!isEmpty(queue) && timeOfDay > 480) {
+		if(!isEmpty(queue) && timeOfDay >= 480) {
 			int num = cashierOpen(cashiers, numCashiers, timeOfDay);
 			if(num > -1) {
 				while(!isEmpty(queue) && cashierOpen(cashiers, numCashiers, timeOfDay) != -1) {
 					customer first = pop(queue);
 					int open = cashierOpen(cashiers, numCashiers, timeOfDay);
 					totalWait += timeOfDay - first.arrivalTime;
-					cashiers[num] = first.proccessTime;
+					cashiers[num] += first.proccessTime;
 				}
 			}
-			timeOfDay++;
-			continue;
-		}
+		} else {
 		
 		int r = (rand() % upper4) + 1;
 		int customers = 0;
@@ -83,11 +81,13 @@ void simulation(int numOfTellers) {
 		
 		//if there is a line
 		if(!isEmpty(queue)) {
-			int num = cashierOpen(cashiers, numCashiers, timeOfDay);
-			if(num != -1) {
+			//int num = cashierOpen(cashiers, numCashiers, timeOfDay);
+			while(cashierOpen(cashiers, numCashiers, timeOfDay) != -1 && !isEmpty(queue)) {
+				int line = cashierOpen(cashiers, numCashiers, timeOfDay);
+				//fprintf(stderr, "here");
 				customer first = pop(queue);
 				totalWait += timeOfDay - first.arrivalTime;
-				cashiers[num] += first.proccessTime;
+				cashiers[line] += first.proccessTime;
 			}
 			for(int j = 0; j < customers; j++) {
 				t = expdist (AVG_SERVICE);
@@ -104,8 +104,9 @@ void simulation(int numOfTellers) {
 				}
 			}
 		}
-
+		}
 		timeOfDay++;
+		fprintf(stderr, "TotalWaitTime: %d\n",totalWait); 
 	}
 	calc(totalWait, totalCustomers, timeOfDay);
 }

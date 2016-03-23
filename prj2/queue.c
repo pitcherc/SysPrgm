@@ -1,4 +1,5 @@
-#import "queue.h"
+#include "queue.h"
+#include <stdio.h>
 
 void push(customer queue[], int arrival, int process) {
 	customer c = {arrival, process};
@@ -7,13 +8,19 @@ void push(customer queue[], int arrival, int process) {
 }
 
 int isEmpty(customer queue[]) {
-	if(next == 0) {
+	if(next == front) {
+		next = front = 0;
 		return 1;
 	}
 	return 0;
 }
 
 customer pop(customer queue[]) {
+	if(front == next){
+		customer c = {0,0};
+		return c;
+	}
+	//fprintf(stderr, "%d\n", front);
 	customer c = queue[front];
 	front++;
 	return c;

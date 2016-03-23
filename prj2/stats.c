@@ -1,4 +1,5 @@
-#import "stats.h"
+#include "stats.h"
+#include <stdio.h>
 
 void calc(int waitTime, int count, int time) {
 	printf("Number of Customers: %d\n", count);
