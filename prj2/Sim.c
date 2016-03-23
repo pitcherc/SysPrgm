@@ -4,7 +4,7 @@
 #include "queue.h"
 
 #define AVG_SERVICE 2.0
-#define SIZE 3000
+#define SIZE 1500
 
 int expdist (double mean) {
 	double r = rand();
@@ -30,7 +30,7 @@ int main (int argc, char *argv[]) {
 	if(argv[2] != NULL) {
 		numCashiers = atoi(argv[2]);
 	}
-	double cashiers[numCashiers];
+	int cashiers[numCashiers];
 	
 	FILE *fp;
 	fp = fopen(argv[1], "r");
@@ -57,15 +57,15 @@ int main (int argc, char *argv[]) {
 	int upper4 = percent[0] + percent[1] + percent[2] + percent[3] + percent[4];
 	
 	timeOfDay = 0;
-	while(timeOfDay < 480 || queue[0] != NULL) {
+	while(timeOfDay < 480 || !isEmpty(queue)) {
 		
 		//after hours
-		if(queue[0] != NULL && timeOfDay > 480) {
-			int num = cashierOpen(cashiers[], numCashiers, timeOfDay);
+		if(!isEmpty(queue) && timeOfDay > 480) {
+			int num = cashierOpen(cashiers, numCashiers, timeOfDay);
 			if(num > -1) {
-				while(queue[0] != NULL && cashierOpen(cashiers[], numCashiers, timeOfDay) != -1) {
-					customer first = pop(queue[]);
-					int open = cashierOpen(cashiers[], numCashiers, timeOfDay);
+				while(!isEmpty(queue) && cashierOpen(cashiers, numCashiers, timeOfDay) != -1) {
+					customer first = pop(queue);
+					int open = cashierOpen(cashiers, numCashiers, timeOfDay);
 					cashiers[num] = first.proccessTime;
 				}
 			}
@@ -93,21 +93,21 @@ int main (int argc, char *argv[]) {
 		}
 		
 		//if there is a line
-		if(queue[0] != NULL) {
-			int num = cashierOpen(cashiers[], numCashiers, timeOfDay);
+		if(!isEmpty(queue)) {
+			int num = cashierOpen(cashiers, numCashiers, timeOfDay);
 			if(num != -1) {
-				customer first = pop(queue[]);
+				customer first = pop(queue);
 			}
 			for(int j = 0; j < customers; j++) {
 				t = expdist (AVG_SERVICE);
-				push(queue[], timeOfDay, t);
+				push(queue, timeOfDay, t);
 			}
 		} else {	//if there is no line
 			for(int j = 0; j < customers; j++) {
 				t = expdist (AVG_SERVICE);
-				int num = cashierOpen(cashiers[], numCashiers, timeOfDay);
+				int num = cashierOpen(cashiers, numCashiers, timeOfDay);
 				if(num != -1) {
-					push(queue[], timeOfDay, t);
+					push(queue, timeOfDay, t);
 				} else {
 					cashiers[num] += t;
 				}
