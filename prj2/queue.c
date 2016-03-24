@@ -16,11 +16,10 @@ int isEmpty(customer queue[]) {
 }
 
 customer pop(customer queue[]) {
-	if(front == next){
-		customer c = {0,0};
-		return c;
-	}
-	//fprintf(stderr, "%d\n", front);
+//	if(front == next){
+//		customer c = {0,0};
+//		return c;
+//	}
 	customer c = queue[front];
 	front++;
 	return c;
